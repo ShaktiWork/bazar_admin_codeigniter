@@ -32,6 +32,22 @@ class Category_model extends CI_Model {
 		}
 	}
 	
+	
+	function confirmsubDeleteCategory($subcatid){
+		
+		$this->db->set('active', 0); //value that used to update column  
+        $this->db->where('subcatid', $subcatid); //which row want to upgrade  
+        $this->db->update('t_subcategory');  //table name
+		if ($this->db->affected_rows() > 0)
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
 	public function createCategory($data)
 	{
 		$this->db->insert('t_category',$data);

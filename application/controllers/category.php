@@ -52,6 +52,20 @@ class Category extends CI_Controller
         
     }
 	
+	    public function deletesubCategory()
+    {
+        $catid = $this->input->post('subcatid');
+        if ($catid != "") {
+            $result = $this->category_model->confirmsubDeleteCategory($catid);
+            if ($result) {
+                echo "200";
+            } else {
+                echo "400";
+            }
+        }
+        
+    }
+	
 	   public function addCategory(){
 		   $data=array('categoryname'=>$this->input->post('categoryname'),
 		   'active'=>1,'imagepath'=>$this->input->post('imageLink'));
@@ -98,8 +112,7 @@ class Category extends CI_Controller
 		 
 		 public function loadsubCategory()
          { 
-		     // $catid = $this->input->post('category');
-			$category = $this->input->post('category');
+		    $category = $this->input->post('category');
 			if ($category != "") {
              
              }
@@ -137,11 +150,8 @@ class Category extends CI_Controller
                     if (!$this->upload->do_upload('qqfile')) {
                         echo $this->upload->display_errors();
                     } else {
-                       // echo 'uploads/' . $_FILES['qqfile']['name'];
-						
-						$data['imgepath']='uploads/' . $_FILES['qqfile']['name'];
+                       $data['imgepath'] = 'uploads/'.$this->upload->file_name;
 						echo json_encode($data);
-						
 						
                     }
                 }

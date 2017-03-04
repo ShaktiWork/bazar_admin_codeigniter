@@ -101,17 +101,18 @@
      <tr><td><?=$category->categoryname;?></td>
       <td><img src="<?php echo base_url();?><?=$category->imagepath;?>" class="noimage_found" alt="Smiley face" width="42" height="42"></td>
    <!--   <td><img scr="<?php echo base_url();?><?=$category->imagepath;?>"/></td> -->
-	 <td><button type="button" class="btn btn-primary btn-xs btn-mini editcat" value=<?=$category->catid;?> name="editCat" id=catidedit<?=$category->catid;?>>Edit</button>
-	 <button type="button" class="btn btn-danger btn-xs btn-mini deleteCat" name="deleteCat" onclick="showPrompt('are your sure you you want to delete', 'Are you ready?');"  value=<?=$category->catid;?> id=catiddel<?=$category->catid;?> data-target="#myModal">Delete</button>
-	 </td>
+   <td><button type="button" class="btn btn-primary btn-xs btn-mini editcat" value=<?=$category->catid;?> name="editCat" id=catidedit<?=$category->catid;?>>Edit</button>
+   <button type="button" class="btn btn-danger btn-xs btn-mini deleteCat" name="deleteCat" onclick="showPrompt('are your sure you you want to delete', 'Are you ready?');"  value=<?=$category->catid;?> id=catiddel<?=$category->catid;?> data-target="#myModal">Delete</button>
+   </td>
      </tr>     
      <?php }?>  
  </tbody>
 </table>
 </div>
+    <form  name="addcategory" id="addcategorygform">
     <div class="row" id="addcategory">
         <div class="col-md-8 col-sm-8 col-xs-8">
-            <input type="text" name="imageLink" id="imageLink">
+            <input type="hidden" name="imageLink" id="imageLink">
 
 
 
@@ -119,7 +120,7 @@
                <label class="form-label">Category Name</label>
                   <span class="help">e.g. "Bus"</span>
                   <div class="controls">
-                  <input type="text" id="categoryname" name="categoryname" class="form-control">
+                  <input type="text" id="categoryname" name="categoryname" required class="form-control">
                   </div>
           </div>
 
@@ -130,12 +131,13 @@
 
            <div class="form-group">
                     <div class="pull-right">
-                      <button class="btn btn-success btn-cons" onclick="createCategory();" type="submit"><i class="icon-ok"></i> Save</button>
+                      <button class="btn btn-success btn-cons" onclick="createCategory();" type="button"><i class="icon-ok"></i> Save</button>
                        <button class="btn btn-white btn-cons cancleaddCategory"  onclick="cancleaddCategory();"type="button" id="cancleaddCategory">Cancel</button>
                     </div>
                   </div>
         </div>
-    </div>
+     </div>
+</form>
 
 
 
@@ -162,6 +164,7 @@
       callbacks: {
         onComplete: function(id, fileName, responseJSON) {
       alert(responseJSON.imgepath)
+       console.log(responseJSON.imgepath)
       $("#imageLink").val(responseJSON.imgepath);
       
           if (responseJSON.success) {
@@ -176,16 +179,16 @@
     function showPrompt(msg, title){
         $.prompt(msg, {
             title: title,
-			buttons: { "Yes": true, "No": false },
-	       submit: function(e,v,m,f){
-		// use e.preventDefault() to prevent closing when needed or return false. 
-		// e.preventDefault(); 
-		    if(v){
-				 confirmDeleteCategory();
-			}
+      buttons: { "Yes": true, "No": false },
+         submit: function(e,v,m,f){
+    // use e.preventDefault() to prevent closing when needed or return false. 
+    // e.preventDefault(); 
+        if(v){
+         confirmDeleteCategory();
+      }
    
-		    console.log("Value clicked was: "+ v);
-	     }
+        console.log("Value clicked was: "+ v);
+       }
         });
     }
    
@@ -196,15 +199,15 @@
         });
     });
     
-	 function confirmDeleteCategory(){
-   	  $.post('<?php echo base_url();?>category/deleteCategory', {catid:catid}, function (data){
-		
-		  if(data==200){
-			 ohSnap("Category Has been deleted successfully.", {'color':'green'})
-			   
-		 }if(data==400){
-			ohSnap("Oops. Something went wrong.Please try again later.", {'color':'red'}) 
-		 }
+   function confirmDeleteCategory(){
+      $.post('<?php echo base_url();?>category/deleteCategory', {catid:catid}, function (data){
+    
+      if(data==200){
+       ohSnap("Category Has been deleted successfully.", {'color':'green'})
+         
+     }if(data==400){
+      ohSnap("Oops. Something went wrong.Please try again later.", {'color':'red'}) 
+     }
          displayCategory();
         });
     }
@@ -214,6 +217,8 @@
       categoryname=$("#categoryname").val();
      var  imageLink=$("#imageLink").val();
       
+      var isValid=$("#addcategorygform").valid();
+       if(isValid){
       $.post('<?php echo base_url();?>category/addCategory', {categoryname:categoryname,imageLink:imageLink}, function (data){
       if(data==200){
        ohSnap("Category Has been deleted successfully.", {'color':'green'})
@@ -223,6 +228,7 @@
      }
          displayCategory();
         });
+    }
 
     }
    </script>  

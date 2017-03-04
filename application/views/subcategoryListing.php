@@ -127,30 +127,29 @@ else{
 
 
     
-
+      <form  name="addcategory" id="addcategorygform">
     <div class="row" id="addsubcategory" style="display:none;">
         <div class="col-md-8 col-sm-8 col-xs-8">
 
 
-<div class="form-group">
-                     <div class="form-group">
+
+                  <div class="form-group">
                       <label class="form-label">Category Namee</label>
                        <div class="controls">
-                      <select id="category2" style="width:100%">
-                         <option value="-1">Select Category</option>
+                      <select id="category2"  data-init-plugin="select2"   class="select2 form-control" style="width:100%" required >
+                         <option value="">Select Category</option>
                          <?php foreach($Category as $category){?>
                          <option value=<?=$category->categoryname;?>><?=$category->categoryname;?></option>
                         <?php }?>  
                      </select>
                       </div>
-                  </div>
-                </div>
-
+                  </div> 
+                
            <div class="form-group">
                <label class="form-label">Sub Category Name</label>
                   <span class="help">e.g. "Bus"</span>
                   <div class="controls">
-                  <input type="text" id="subcategoryname" name="subcategoryname" class="form-control">
+                  <input type="text" id="subcategoryname" name="subcategoryname" required class="form-control">
                   </div>
           </div>
 
@@ -158,12 +157,13 @@ else{
 
            <div class="form-group">
                     <div class="pull-right">
-                      <button class="btn btn-success btn-cons" onclick="createsubCategory();" type="submit"><i class="icon-ok"></i> Save</button>
-                       <button class="btn btn-white btn-cons" type="button" id="cancelButton">Cancel</button>
+                      <button class="btn btn-success btn-cons" onclick="createsubCategory();" type="button"><i class="icon-ok"></i> Save</button>
+                       <button class="btn btn-white btn-cons deleteCat" type="button" id="cancelButton" onclick="showPrompt('are your sure you you want to delete', 'Are you ready?');">Cancel</button>
                     </div>
                   </div>
            </div>
     </div>
+  </div>
 
      <input type="hidden" name="imageLink" id="imageLink">
 
@@ -218,6 +218,9 @@ else{
     <script>
     $( document ).ready(function() {
        $('select').select2();
+       $('.select2', "#addcategorygform").change(function () {
+        $('#addcategorygform').validate().element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
+    });
     });
 
      function searchbyCategory(){
@@ -233,7 +236,8 @@ else{
      
 
      function createsubCategory(){
-
+var isValid=$("#addcategorygform").valid();
+       if(isValid){
       categoryname=$("#category2").val();
       subcategoryname=$("#subcategoryname").val();
       imageLink=$("#imageLink").val();
@@ -245,10 +249,48 @@ else{
      }if(data==400){
       ohSnap("Oops. Something went wrong.Please try again later.", {'color':'red'}) 
      }
-         displayCategory();
-        });
+      displaysubCategory();
+   });
+ }
+}
 
+    var subcatid="";
+   $().ready(function() {
+         $( ".deleteCat" ).click(function() {
+         subcatid=$(this).val();
+       });
+    });
+    
+   function confirmDeleteSubCategory(){
+      $.post('<?php echo base_url();?>category/deletesubCategory', {subcatid:subcatid}, function (data){
+    
+      if(data==200){
+       ohSnap("Category Has been deleted successfully.", {'color':'green'})
+         
+     }if(data==400){
+      ohSnap("Oops. Something went wrong.Please try again later.", {'color':'red'}) 
+     }
+         //displayCategory();
+        });
     }
+
+     function showPrompt(msg, title){
+        $.prompt(msg, {
+            title: title,
+      buttons: { "Yes": true, "No": false },
+         submit: function(e,v,m,f){
+    // use e.preventDefault() to prevent closing when needed or return false. 
+    // e.preventDefault(); 
+        if(v){
+         confirmDeleteSubCategory();
+      }
+   
+        console.log("Value clicked was: "+ v);
+        displaysubCategory();
+       }
+        });
+    }
+   
 
 
 </script>  

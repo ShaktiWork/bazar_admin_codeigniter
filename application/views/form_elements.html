@@ -1,0 +1,191 @@
+AJAX File Upload using Codeigniter, jQuery
+
+August 18, 2016 SoumitraAJAX, Codeigniter, jQueryAJAX file upload, Codeigniter AJAX, Codeigniter File Upload, Codeigniter jQuery, file upload, Jquery File Upload
+FacebookTwitterGoogle+PinterestTumblrStumbleUponLinkedInWhatsAppCopy LinkEmailShare
+
+ 
+I will show you how to upload a file using Codeigniter, AJAX and jQuery without page refresh. This file upload tutorial example is very helpful to implement the upload functionality. In this example the file is selected using the browse button and file is uploaded to the ‘uploads’ directory. Codeigniter controller stores the file into the defined location and returns response as a success or failure message from the controller. As a validation step I have added only to check if you have selected a file for uploading or not.
+
+You may read also AJAX Multiple Files Upload using PHP, jQuery and  AJAX File Upload using PHP, jQuery
+
+Prerequisites
+
+Netbeans 8.1
+XAMPP in Windows
+Codeigniter 3.0.6
+
+Configure XAMPP and Netbeans
+
+From Netbeans IDE go to Tools->Options. Click on PHP. Now on tab “General” browse the file for “PHP 5 Interpreter”. The php interpreter file generally placed inside the <physical drive in Windows OS>:xamppphpphp.exe
+
+Configure Codeigniter and Netbeans
+
+Create a new PHP project in Netbeans. Then remove the index.php file from the newly created project. Now copy the extracted files from Codeigniter 3.0.6 to the newly created project directory.
+
+Directory Structure
+
+A typical directory structure for the project would be as shown below. Here assests directory will contain static resources like css, js, images. uploads directory will hold all uploaded files.
+
+ajax file upload
+
+Step 1. Now modify <root directory>/application/config/autoload.php file for auto-loading html, url, file, form and session
+
+
+$autoload['helper'] = array('html', 'url', 'file', 'form');
+1
+$autoload['helper'] = array('html', 'url', 'file', 'form');
+Step 2. Create a controller file ajaxupload.php under ci3/application/controllers with the following source code
+
+PHP
+
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+/**
+ * Description of ajaxupload
+ *
+ * @author http://roytuts.com
+ */
+class AjaxUpload extends CI_Controller {
+
+    function __construct() {
+        parent::__construct();
+    }
+
+    function index() {
+        $this->load->view('file_upload_ajax', NULL);
+    }
+
+    function upload_file() {
+
+        //upload file
+        $config['upload_path'] = 'uploads/';
+        $config['allowed_types'] = '*';
+        $config['max_filename'] = '255';
+        $config['encrypt_name'] = TRUE;
+        $config['max_size'] = '1024'; //1 MB
+
+        if (isset($_FILES['file']['name'])) {
+            if (0 < $_FILES['file']['error']) {
+                echo 'Error during file upload' . $_FILES['file']['error'];
+            } else {
+                if (file_exists('uploads/' . $_FILES['file']['name'])) {
+                    echo 'File already exists : uploads/' . $_FILES['file']['name'];
+                } else {
+                    $this->load->library('upload', $config);
+                    if (!$this->upload->do_upload('file')) {
+                        echo $this->upload->display_errors();
+                    } else {
+                        echo 'File successfully uploaded : uploads/' . $_FILES['file']['name'];
+                    }
+                }
+            }
+        } else {
+            echo 'Please choose a file';
+        }
+    }
+
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+<?php
+ 
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+ 
+/**
+ * Description of ajaxupload
+ *
+ * @author http://roytuts.com
+ */
+class AjaxUpload extends CI_Controller {
+ 
+    function __construct() {
+        parent::__construct();
+    }
+ 
+    function index() {
+        $this->load->view('file_upload_ajax', NULL);
+    }
+ 
+    function upload_file() {
+ 
+        //upload file
+        $config['upload_path'] = 'uploads/';
+        $config['allowed_types'] = '*';
+        $config['max_filename'] = '255';
+        $config['encrypt_name'] = TRUE;
+        $config['max_size'] = '1024'; //1 MB
+ 
+        if (isset($_FILES['file']['name'])) {
+            if (0 < $_FILES['file']['error']) {
+                echo 'Error during file upload' . $_FILES['file']['error'];
+            } else {
+                if (file_exists('uploads/' . $_FILES['file']['name'])) {
+                    echo 'File already exists : uploads/' . $_FILES['file']['name'];
+                } else {
+                    $this->load->library('upload', $config);
+                    if (!$this->upload->do_upload('file')) {
+                        echo $this->upload->display_errors();
+                    } else {
+                        echo 'File successfully uploaded : uploads/' . $_FILES['file']['name'];
+                    }
+                }
+            }
+        } else {
+            echo 'Please choose a file';
+        }
+    }
+ 
+}
+Step 3

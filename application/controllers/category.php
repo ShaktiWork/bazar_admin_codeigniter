@@ -16,13 +16,29 @@ class Category extends CI_Controller
     }
     
     
+	
+	
     
     public function displayCategory()
     { 
 	  
+			
+			
+			
+			
+			
+			if($this->session->userdata('user_email')!="")
+		{
 			$this->load->view('homejscss');
 		    $this->load->view('sidebar');
             $this->load->view('category');
+		}
+		else{
+			$data['title']= 'Home';
+			$this->load->view('jsandcss',$data);
+			$this->load->view('login',$data);
+			
+		}
       
     }
 	
@@ -54,9 +70,9 @@ class Category extends CI_Controller
 	
 	    public function deletesubCategory()
     {
-        $catid = $this->input->post('subcatid');
+        $subcatid = $this->input->post('subcatid');
         if ($catid != "") {
-            $result = $this->category_model->confirmsubDeleteCategory($catid);
+            $result = $this->category_model->confirmsubDeleteCategory($subcatid);
             if ($result) {
                 echo "200";
             } else {
@@ -90,9 +106,22 @@ class Category extends CI_Controller
             }
         }
 		
-		public function displaysubCategory()
-         { 
-		     // $catid = $this->input->post('category');
+		 public function editCategory(){
+			  $catid = $this->input->post('catid');
+			   $categoryname=$this->input->post('categoryname');
+			    $imageLink=$this->input->post('imageLink');
+			 
+		   $result = $this->category_model->updateSaveCategory($categoryname,$catid,$imageLink);
+            if ($result) {
+                echo "200";
+            } else {
+                echo "400";
+            }
+        }
+		
+		public function displaysubCategory(){ 
+		   if($this->session->userdata('user_email')!="")
+		{
 			$category = $this->input->post('category');
 			if ($category != "") {
              
@@ -106,6 +135,13 @@ class Category extends CI_Controller
 			$this->load->view('homejscss');
 		    $this->load->view('sidebar');
             $this->load->view('subcategory');
+		}
+		else{
+			$data['title']= 'Home';
+			$this->load->view('jsandcss',$data);
+			$this->load->view('login',$data);
+			
+		}
       
          }
 		 

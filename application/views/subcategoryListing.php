@@ -165,7 +165,7 @@ else{
     </div>
   </div>
 
-     <input type="hidden" name="imageLink" id="imageLink">
+     <input type="text" name="imageLink" id="imageLink">
 
 
 

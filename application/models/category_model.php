@@ -61,6 +61,28 @@ class Category_model extends CI_Model {
 		}
 	}
 	
+	
+	public function updateSaveCategory($data,$catid,$imageLink)
+	{
+		$this->db->set('categoryname', $data); //value that used to update column  
+		if($imageLink!=""){
+			$this->db->set('imagepath', $imageLink);
+		}
+        $this->db->where('catid', $catid); //which row want to upgrade  
+        $this->db->update('t_category');  //table name
+		if ($this->db->affected_rows() > 0)
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	
+	
+	
 	public function createsubCategory($data)
 	{
 		$this->db->insert('t_subcategory',$data);

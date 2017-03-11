@@ -101,7 +101,7 @@
      <tr><td><?=$category->categoryname;?></td>
       <td><img src="<?php echo base_url();?><?=$category->imagepath;?>" class="noimage_found" alt="Smiley face" width="42" height="42"></td>
    <!--   <td><img scr="<?php echo base_url();?><?=$category->imagepath;?>"/></td> -->
-   <td><button type="button" class="btn btn-primary btn-xs btn-mini editcat" value=<?=$category->catid;?> name="editCat" id=catidedit<?=$category->catid;?>>Edit</button>
+   <td><button type="button" class="btn btn-primary btn-xs btn-mini editcat" value=<?=$category->catid;?>  onclick="editCategory('<?=$category->categoryname;?>','<?=$category->catid;?>')" name="editCat" id=catidedit<?=$category->catid;?>>Edit</button>
    <button type="button" class="btn btn-danger btn-xs btn-mini deleteCat" name="deleteCat" onclick="showPrompt('are your sure you you want to delete', 'Are you ready?');"  value=<?=$category->catid;?> id=catiddel<?=$category->catid;?> data-target="#myModal">Delete</button>
    </td>
      </tr>     
@@ -121,6 +121,7 @@
                   <span class="help">e.g. "Bus"</span>
                   <div class="controls">
                   <input type="text" id="categoryname" name="categoryname" required class="form-control">
+                   <input type="hidden" id="catid" name="catid" required class="form-control">
                   </div>
           </div>
 
@@ -131,7 +132,9 @@
 
            <div class="form-group">
                     <div class="pull-right">
-                      <button class="btn btn-success btn-cons" onclick="createCategory();" type="button"><i class="icon-ok"></i> Save</button>
+                      <button class="btn btn-success btn-cons" onclick="createCategory();" id="addNewCategory" type="button"><i class="icon-ok"></i> Save</button>
+                      <button class="btn btn-success btn-cons" onclick="editCategoryButton();" id="updateSaveCategory" style="display:none;" type="button"><i class="icon-ok"></i> Update</button>
+                     
                        <button class="btn btn-white btn-cons cancleaddCategory"  onclick="cancleaddCategory();"type="button" id="cancleaddCategory">Cancel</button>
                     </div>
                   </div>
@@ -213,22 +216,87 @@
     }
 
     function createCategory(){
+      alert("1")
 
-      categoryname=$("#categoryname").val();
+     /* categoryname=$("#categoryname").val();
      var  imageLink=$("#imageLink").val();
       
       var isValid=$("#addcategorygform").valid();
        if(isValid){
       $.post('<?php echo base_url();?>category/addCategory', {categoryname:categoryname,imageLink:imageLink}, function (data){
       if(data==200){
-       ohSnap("Category Has been deleted successfully.", {'color':'green'})
+       ohSnap("Category Has been Added successfully.", {'color':'green'})
          
      }if(data==400){
       ohSnap("Oops. Something went wrong.Please try again later.", {'color':'red'}) 
      }
          displayCategory();
         });
-    }
+    }*/
 
     }
+    
+
+
+    function editCategoryButton(){
+      alert("11")
+
+
+        categoryname=$("#categoryname").val();
+      var  imageLink=$("#imageLink").val();
+      var  catid=$("#catid").val();
+      
+      var isValid=$("#addcategorygform").valid();
+       if(isValid){
+      $.post('<?php echo base_url();?>category/editCategory', {categoryname:categoryname,imageLink:imageLink,catid:catid}, function (data){
+      if(data==200){
+       ohSnap("Category Updated been Added successfully.", {'color':'green'})
+         
+     }if(data==400){
+      ohSnap("Oops. Something went wrong.Please try again later.", {'color':'red'}) 
+     }
+         displayCategory();
+        });
+   }
+    }
+     function editCategory(categoryname,catid){
+      alert(categoryname);
+               $("#cataegorytablediv").hide();
+               $("#addcategorybutton").hide();
+               $("#addcategory").show();
+
+               $("#categoryname").val(categoryname);
+                $("#addNewCategory").css("display","none");
+                $("#updateSaveCategory").css("display","block");
+               
+                 $("#catid").val(catid);
+               
+      }
+
+
+
+
+
+      function updateSaveCategory(){
+
+alert();
+     /* categoryname=$("#categoryname").val();
+      var  imageLink=$("#imageLink").val();
+      var  catid=$("#catid").val();
+      
+      var isValid=$("#addcategorygform").valid();
+       if(isValid){
+      $.post('<?php echo base_url();?>category/updateSaveCategory', {categoryname:categoryname,imageLink:imageLink,catid:catid}, function (data){
+      if(data==200){
+       ohSnap("Category Updated been Added successfully.", {'color':'green'})
+         
+     }if(data==400){
+      ohSnap("Oops. Something went wrong.Please try again later.", {'color':'red'}) 
+     }
+         displayCategory();
+        });*/
+  //  }
+
+    }
+
    </script>  

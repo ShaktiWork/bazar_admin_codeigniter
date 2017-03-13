@@ -17,10 +17,20 @@
    $( document ).ready(function() {
        $('select').select2();
        loadRegion();
+	   
+	     $("#city").on('change', function() {
+        //alert( this.value );
+		var city=this.value;
+		var state=$("#state").val();
+		//alert(state);
+		loadRegion(state,city);
+})
+
     });
 
       function loadCity(){
        var state=$("#state").select2().val();
+	  
        var myArr=["one","two","three"];
        $.post('<?php echo base_url();?>Region/loadCity', {state:state}, function (data){
         console.log(data);
@@ -35,15 +45,17 @@
        });
 
       }
-
-      function loadRegion(){
-       $.post('<?php echo base_url();?>Region/loadRegion', {}, function (data){
+	  
+	   function loadRegion(state,city){
+		  
+       $.post('<?php echo base_url();?>Region/loadRegion', {state:state,city:city}, function (data){
        // console.log(data);
         $("#regiondiv").html(data);
       });
 
       }
-
+	  
+	
      </script>
     </head>
        

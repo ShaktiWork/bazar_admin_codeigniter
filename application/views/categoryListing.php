@@ -100,7 +100,7 @@
       <?php foreach($Category as $category){?>
      <tr><td><?=$category->categoryname;?></td>
       <td><img src="<?php echo base_url();?><?=$category->imagepath;?>" class="noimage_found" alt="Smiley face" width="42" height="42"></td>
-   <!--   <td><img scr="<?php echo base_url();?><?=$category->imagepath;?>"/></td> -->
+  
    <td><button type="button" class="btn btn-primary btn-xs btn-mini editcat" value=<?=$category->catid;?>  onclick="editCategory('<?=$category->categoryname;?>','<?=$category->catid;?>')" name="editCat" id=catidedit<?=$category->catid;?>>Edit</button>
    <button type="button" class="btn btn-danger btn-xs btn-mini deleteCat" name="deleteCat" onclick="showPrompt('are your sure you you want to delete', 'Are you ready?');"  value=<?=$category->catid;?> id=catiddel<?=$category->catid;?> data-target="#myModal">Delete</button>
    </td>

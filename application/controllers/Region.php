@@ -30,7 +30,9 @@ class Region extends CI_Controller
 		 
 		 function loadRegion(){
 		  
-		    $query  = $this->Region_model->loadRegion();
+		    $state = $this->input->post('state');
+			$city = $this->input->post('city');
+		    $query  = $this->Region_model->loadRegion($state,$city);
             $data['Region'] = null;
             if ($query) {
                 $data['Region'] = $query;
